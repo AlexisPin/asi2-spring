@@ -1,7 +1,6 @@
 package com.cpe.springboot.msgreceiver;
 
 import com.cpe.springboot.user.controller.UserService;
-import com.cpe.springboot.user.model.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.RichUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +34,13 @@ public class BusListener {
                 System.out.println(user.getAction());
                 switch (user.getAction()) {
                     case DELETE:
+                        userService.deleteUser(String.valueOf(user.getUser().getId()));
                         break;
-                    case UDPATE:
+                    case UPDATE:
                         userService.updateUser(user.getUser());
                         break;
                     case CREATE:
+                        userService.addUser(user.getUser());
                         break;
                 }
             }
@@ -51,6 +52,6 @@ public class BusListener {
 
     @JmsListener(destination = "queue.update_user", containerFactory = "queueConnectionFactory")
     public void receiveMessageResult(TextMessage message) {
-        doReceive("queue.update_user\"", message);
+        doReceive("queue.update_user", message);
     }
 }

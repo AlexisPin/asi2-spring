@@ -1,6 +1,5 @@
 package com.cpe.springboot.msgemitter;
 
-import com.cpe.springboot.user.model.UserDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.RichUserDTO;

@@ -3,9 +3,12 @@ package com.cpe.springboot.user.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.cpe.springboot.msgemitter.BusService;
 import com.model.RichUserDTO;
+import com.model.UserAction;
+import com.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.cpe.springboot.common.tools.DTOMapper;
 import com.cpe.springboot.user.model.AuthDTO;
-import com.cpe.springboot.user.model.UserDTO;
 import com.cpe.springboot.user.model.UserModel;
 
 //ONLY FOR TEST NEED ALSO TO ALLOW CROOS ORIGIN ON WEB BROWSER SIDE
@@ -38,7 +40,7 @@ public class UserRestController {
 	
 	@RequestMapping(method=RequestMethod.GET,value="/users")
 	private List<UserDTO> getAllUsers() {
-		List<UserDTO> uDTOList=new ArrayList<UserDTO>();
+		List<UserDTO> uDTOList=new ArrayList<>();
 		for(UserModel uM: userService.getAllUsers()){
 			uDTOList.add(DTOMapper.fromUserModelToUserDTO(uM));
 		}
@@ -58,21 +60,36 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/user")
-	public UserDTO addUser(@RequestBody UserDTO user) {
-		return userService.addUser(user);
+	public String addUser(@RequestBody UserDTO user) {
+		RichUserDTO ruser = new RichUserDTO();
+		ruser.setAction(UserAction.CREATE);
+		ruser.setUser(user);
+		busService.sendMsg(ruser, "queue.update_user");
+		return UUID.randomUUID().toString();
+		//return userService.addUser(user);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT,value="/user/{id}")
-	public boolean updateUser(@RequestBody RichUserDTO user, @PathVariable String id) {
-		user.getUser().setId(Integer.valueOf(id));
+	public String updateUser(@RequestBody UserDTO user, @PathVariable String id) {
+		user.setId(Integer.valueOf(id));
+		RichUserDTO ruser = new RichUserDTO();
+		ruser.setAction(UserAction.UPDATE);
+		ruser.setUser(user);
+		busService.sendMsg(ruser, "queue.update_user");
+		return UUID.randomUUID().toString();
 		//return userService.updateUser(user);
-		busService.sendMsg(user, "queue.update_user");
-		return true;
 	}
 	
 	@RequestMapping(method=RequestMethod.DELETE,value="/user/{id}")
-	public void deleteUser(@PathVariable String id) {
-		userService.deleteUser(id);
+	public boolean deleteUser(@PathVariable String id) {
+		RichUserDTO user = new RichUserDTO();
+		UserDTO u = new UserDTO();
+		u.setId(Integer.valueOf(id));
+		user.setAction(UserAction.DELETE);
+		user.setUser(u);
+		busService.sendMsg(user, "queue.update_user");
+		return true;
+		//userService.deleteUser(id);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/auth")

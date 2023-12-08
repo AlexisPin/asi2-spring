@@ -3,6 +3,7 @@ package com.cpe.springboot.user.model;
 import com.cpe.springboot.card.model.CardModel;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.model.UserDTO;
 
 import java.io.Serializable;
 import java.util.Collection;

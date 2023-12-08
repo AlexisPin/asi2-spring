@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.cpe.springboot.card.Controller.CardModelService;
 import com.cpe.springboot.card.model.CardModel;
 import com.cpe.springboot.common.tools.DTOMapper;
-import com.cpe.springboot.user.model.UserDTO;
+import com.model.UserDTO;
 import com.cpe.springboot.user.model.UserModel;
 
 @Service
@@ -72,7 +72,7 @@ public class UserService {
 
 	private UserModel fromUDtoToUModel(UserDTO user) {
 		UserModel u = new UserModel(user);
-		List<CardModel> cardList = new ArrayList<CardModel>();
+		List<CardModel> cardList = new ArrayList<>();
 		for (Integer cardId : user.getCardList()) {
 			Optional<CardModel> card = cardModelService.getCard(cardId);
 			if (card.isPresent()) {
@@ -80,9 +80,5 @@ public class UserService {
 			}
 		}
 		return u;
-	}
-
-	public void updateUser(com.model.UserDTO user) {
-		System.out.println(user.getLogin());
 	}
 }
