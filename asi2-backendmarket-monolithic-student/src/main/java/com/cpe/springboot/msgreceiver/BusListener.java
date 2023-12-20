@@ -1,5 +1,7 @@
 package com.cpe.springboot.msgreceiver;
 
+import com.cpe.springboot.message.controller.MessageService;
+import com.cpe.springboot.message.model.MessageDTO;
 import com.cpe.springboot.user.controller.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.RichUserDTO;
@@ -23,10 +25,14 @@ public class BusListener {
 
     @Autowired
     ObjectMapper objectMapper;
+    
+    @Autowired 
+    MessageService messageService;
 
     private void doReceive(String busName, TextMessage message) {
         try {
             String clazz = message.getStringProperty("ObjectType");
+            System.out.println(clazz);
             Object o = objectMapper.readValue(message.getText(), Class.forName(clazz));
 
             if (o instanceof RichUserDTO) {
@@ -44,6 +50,11 @@ public class BusListener {
                         break;
                 }
             }
+            if(o instanceof MessageDTO) {
+            	MessageDTO messageDto = (MessageDTO)o;
+            	messageService.addMessage(messageDto);
+            	
+            }
             System.out.println("[BUSLISTENER] [CHANNEL "+busName+"] RECEIVED String MSG=["+message.getText()+"]");
         } catch (IOException | JMSException | ClassNotFoundException  e) {
             throw new RuntimeException(e);
@@ -53,5 +64,10 @@ public class BusListener {
     @JmsListener(destination = "queue.update_user", containerFactory = "queueConnectionFactory")
     public void receiveMessageResult(TextMessage message) {
         doReceive("queue.update_user", message);
+    }
+    
+    @JmsListener(destination = "queue.chat_messages", containerFactory = "queueConnectionFactory")
+    public void receiveChatMessageResult(TextMessage message) {
+        doReceive("queue.chat_messages", message);
     }
 }

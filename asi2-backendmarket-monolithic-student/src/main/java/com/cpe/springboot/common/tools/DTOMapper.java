@@ -1,6 +1,10 @@
 package com.cpe.springboot.common.tools;
 import com.cpe.springboot.card.model.CardDTO;
 import com.cpe.springboot.card.model.CardModel;
+import com.cpe.springboot.conversation.model.ConversationDTO;
+import com.cpe.springboot.conversation.model.ConversationModel;
+import com.cpe.springboot.message.model.MessageDTO;
+import com.cpe.springboot.message.model.MessageModel;
 import com.model.UserDTO;
 import com.cpe.springboot.user.model.UserModel;
 
@@ -36,6 +40,16 @@ public class DTOMapper {
 			uDto.getCardList().add(card.getId());
 		}
 		return uDto;
+	}
+	
+	public static MessageDTO fromMessageModelToMessageDTO(MessageModel mM) {
+		MessageDTO mDto =new MessageDTO(mM);
+		return mDto;
+	}
+	
+	public static ConversationDTO fromConversationModelToConversationDTO(ConversationModel cM) {
+		ConversationDTO cDto =new ConversationDTO(cM);
+		return cDto;
 	}
 	
 }
