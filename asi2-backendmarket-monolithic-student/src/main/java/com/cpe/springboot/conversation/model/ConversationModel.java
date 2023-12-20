@@ -16,6 +16,7 @@ import javax.persistence.*;
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class ConversationModel {
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
 	@OneToOne()

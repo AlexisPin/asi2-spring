@@ -32,7 +32,6 @@ public class BusListener {
     private void doReceive(String busName, TextMessage message) {
         try {
             String clazz = message.getStringProperty("ObjectType");
-            System.out.println(clazz);
             Object o = objectMapper.readValue(message.getText(), Class.forName(clazz));
 
             if (o instanceof RichUserDTO) {
@@ -50,8 +49,9 @@ public class BusListener {
                         break;
                 }
             }
-            if(o instanceof MessageDTO) {
-            	MessageDTO messageDto = (MessageDTO)o;
+            if(o instanceof Message) {
+            	Message mMessage = (Message)o;
+            	MessageDTO messageDto = new MessageDTO(mMessage);
             	messageService.addMessage(messageDto);
             	
             }
