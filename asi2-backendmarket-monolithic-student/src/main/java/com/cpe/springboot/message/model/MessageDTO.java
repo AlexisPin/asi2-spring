@@ -2,6 +2,8 @@ package com.cpe.springboot.message.model;
 
 import java.sql.Timestamp;
 
+import com.cpe.springboot.msgreceiver.Message;
+
 public class MessageDTO  {
 	private Integer id;
 	private String content;
@@ -13,6 +15,17 @@ public class MessageDTO  {
 	public MessageDTO() {
 
 	}
+	
+	
+
+	public MessageDTO(Message message) {
+		this.content = message.getContent();
+		this.timestamp = message.getTimestamp();
+		this.senderId = message.getSenderId();
+		this.receiverId = message.getReceiverId();
+	}
+
+
 
 	public MessageDTO(MessageModel mModel) {
 		this.id = mModel.getId();

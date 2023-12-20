@@ -1,11 +1,16 @@
 package com.cpe.springboot.conversation.controller;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.cpe.springboot.card.model.CardModel;
+import com.cpe.springboot.common.tools.DTOMapper;
 import com.cpe.springboot.conversation.model.ConversationModel;
+import com.cpe.springboot.user.model.UserModel;
+import com.model.UserDTO;
 
 
 @Service
@@ -31,6 +36,10 @@ public class ConversationService {
 			return message;
 		}
 		return conversationRepository.findByUser1IdAndUser2Id(user2Id,user1Id );
+	}
+	
+	public ConversationModel addConversation(ConversationModel conversation) {
+		return conversationRepository.save(conversation);
 	}
 
 }

@@ -52,11 +52,12 @@ public class MessageService {
 		
 		if(oConversation.isEmpty()) {
 			conversation = new ConversationModel(sender.get(), receiver.get());
+			conversationService.addConversation(conversation);
+			
 		}
 		else {
 			conversation = oConversation.get();
 		}
-		
 		MessageModel newMessage = new MessageModel(message.getContent(), message.getTimestamp(), sender.get(), conversation);
 		
 		MessageModel mBd = messageRepository.save(newMessage);
