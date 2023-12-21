@@ -27,7 +27,7 @@ public class ConversationService {
 		if(message.isPresent()) {
 			return message;
 		}
-		return conversationRepository.findByUser1IdAndUser2Id(Integer.valueOf(user2Id),Integer.valueOf(user1Id) );
+		return conversationRepository.findByUser1IdAndUser2Id(Integer.valueOf(user2Id),Integer.valueOf(user1Id));
 	}
 	
 	public Optional<ConversationModel> getConversationByUser1IdAndUser2Id(Integer user1Id, Integer user2Id) {

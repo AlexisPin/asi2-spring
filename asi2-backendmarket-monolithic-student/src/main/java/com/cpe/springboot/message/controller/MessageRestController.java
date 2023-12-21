@@ -32,13 +32,13 @@ public class MessageRestController {
 		private List<MessageDTO> getMessagesByUser1IdAndUser2Id(@PathVariable String user1Id, @PathVariable String user2Id) {
 		List<MessageDTO> dmessageList = new ArrayList<MessageDTO>();
 		List<MessageModel> mmessageList= messageService.getMessagesByUser1IdAndUser2Id(user1Id, user2Id);
-		if(mmessageList.size() > 0) {
+		if(!mmessageList.isEmpty()) {
 			for(MessageModel message: mmessageList) {
 				dmessageList.add(DTOMapper.fromMessageModelToMessageDTO(message));
 			}
-			return dmessageList;
+
 		}
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User1 id:"+user1Id+ "or User2 id" +user2Id+", not found",null);
+		return dmessageList;
 	}
 	
 }

@@ -36,7 +36,7 @@ public class MessageService {
 		if(conversation.isPresent()) {
 			return messageRepository.findByConversationId(conversation.get().getId());
 		}
-		return null;
+		return new ArrayList<>();
 	}
 
 	public MessageDTO addMessage(MessageDTO message) {
@@ -46,14 +46,13 @@ public class MessageService {
 		Optional<UserModel> sender = userService.getUser(message.getSenderId());
 		Optional<UserModel> receiver = userService.getUser(message.getReceiverId());
 		
-		if(sender.isEmpty() && receiver.isEmpty()) {
+		if(sender.isEmpty() || receiver.isEmpty()) {
 			return null;
 		}
 		
 		if(oConversation.isEmpty()) {
 			conversation = new ConversationModel(sender.get(), receiver.get());
 			conversationService.addConversation(conversation);
-			
 		}
 		else {
 			conversation = oConversation.get();
