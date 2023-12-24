@@ -33,7 +33,6 @@ public class BusListener {
         try {
             String clazz = message.getStringProperty("ObjectType");
             Object o = objectMapper.readValue(message.getText(), Class.forName(clazz));
-
             if (o instanceof RichUserDTO) {
                 RichUserDTO user = (RichUserDTO)o;
                 System.out.println(user.getAction());
