@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.cpe.springboot.card.model.CardDTO;
 import com.cpe.springboot.card.model.CardModel;
@@ -74,6 +78,19 @@ public class CardModelService {
 
 	public List<CardModel> getAllCardToSell(){
 		return this.cardRepository.findByUser(null);
+	}
+	
+	@PostConstruct
+	public void populateCardToSell() {
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<CardModel[]> response = restTemplate.getForEntity("http://tp.cpe.fr:8083/cards", CardModel[].class);
+		
+		CardModel[] cardList = response.getBody();
+		
+		for (CardModel card : cardList) {
+			card.setUser(null);
+			cardRepository.save(card);
+		}
 	}
 }
 
